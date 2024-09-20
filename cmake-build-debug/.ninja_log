@@ -1,0 +1,11 @@
+# ninja log v5
+0	193	1726858294532655242	CMakeFiles/ImGuiOpenGLExample.dir/main.cpp.o	17bb34db7937e66b
+1	2884	1726832011007558958	CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_widgets.cpp.o	4296f65ffe0cce95
+0	128	1726858739893347540	build.ninja	9745b895ef735884
+0	2444	1726832010567576899	CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_draw.cpp.o	8a82f16dd8ac1dc5
+0	1972	1726832010095596144	CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_demo.cpp.o	60292c7d717fb7c9
+193	279	1726858294617652870	ImGuiOpenGLExample	2c30bcb29ad2fca
+1	1888	1726832010012599528	CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_tables.cpp.o	81c89ddaa287767b
+1	325	1726832008449663258	CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_glfw.cpp.o	7b3531f05038716f
+0	3081	1726832011203550967	CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui.cpp.o	f42663fb550825e9
+1	289	1726832008413664726	CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_opengl3.cpp.o	b5db18aac31e60f7
