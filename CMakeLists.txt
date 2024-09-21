@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add your source files
 set(SOURCES
-    main.cpp
+
     source/window.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
@@ -36,6 +36,10 @@ find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 
 # Link against OpenGL, GLEW, and GLFW
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(sandbox  main.cpp ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} OpenGL::GL GLEW::GLEW glfw)
+target_link_libraries(sandbox OpenGL::GL GLEW::GLEW glfw)
+
+
+add_executable(helloWindow  examples/helloWindow.cpp ${SOURCES})
+target_link_libraries(helloWindow OpenGL::GL GLEW::GLEW glfw)

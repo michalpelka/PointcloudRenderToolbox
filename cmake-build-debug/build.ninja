@@ -41,86 +41,182 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /home/michal/PointcloudRenderToolbox/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target ImGuiOpenGLExample
+# Object build statements for EXECUTABLE target sandbox
 
 
 #############################################
-# Order-only phony target for ImGuiOpenGLExample
+# Order-only phony target for sandbox
 
-build cmake_object_order_depends_target_ImGuiOpenGLExample: phony || CMakeFiles/ImGuiOpenGLExample.dir
+build cmake_object_order_depends_target_sandbox: phony || CMakeFiles/sandbox.dir
 
-build CMakeFiles/ImGuiOpenGLExample.dir/main.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/main.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/main.cpp.o.d
+build CMakeFiles/sandbox.dir/main.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/main.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/main.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir
 
-build CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui.cpp.o.d
+build CMakeFiles/sandbox.dir/source/window.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/source/window.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/source/window.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir/imgui
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/source
 
-build CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_demo.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_demo.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_demo.cpp.o.d
+build CMakeFiles/sandbox.dir/imgui/imgui.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/imgui/imgui.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir/imgui
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/imgui
 
-build CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_draw.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_draw.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_draw.cpp.o.d
+build CMakeFiles/sandbox.dir/imgui/imgui_demo.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_demo.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/imgui/imgui_demo.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir/imgui
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/imgui
 
-build CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_widgets.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_widgets.cpp.o.d
+build CMakeFiles/sandbox.dir/imgui/imgui_draw.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_draw.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/imgui/imgui_draw.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir/imgui
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/imgui
 
-build CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_tables.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_tables.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_tables.cpp.o.d
+build CMakeFiles/sandbox.dir/imgui/imgui_widgets.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/imgui/imgui_widgets.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir/imgui
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/imgui
 
-build CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_glfw.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/imgui/backends/imgui_impl_glfw.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_glfw.cpp.o.d
+build CMakeFiles/sandbox.dir/imgui/imgui_tables.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_tables.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/imgui/imgui_tables.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/imgui
 
-build CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_opengl3.cpp.o: CXX_COMPILER__ImGuiOpenGLExample_Debug /home/michal/PointcloudRenderToolbox/imgui/backends/imgui_impl_opengl3.cpp || cmake_object_order_depends_target_ImGuiOpenGLExample
-  DEP_FILE = CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_opengl3.cpp.o.d
+build CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_glfw.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/imgui/backends/imgui_impl_glfw.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_glfw.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
-  OBJECT_FILE_DIR = CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/imgui/backends
+
+build CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_opengl3.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/imgui/backends/imgui_impl_opengl3.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_opengl3.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/imgui/backends
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target ImGuiOpenGLExample
+# Link build statements for EXECUTABLE target sandbox
 
 
 #############################################
-# Link the executable ImGuiOpenGLExample
+# Link the executable sandbox
 
-build ImGuiOpenGLExample: CXX_EXECUTABLE_LINKER__ImGuiOpenGLExample_Debug CMakeFiles/ImGuiOpenGLExample.dir/main.cpp.o CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui.cpp.o CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_demo.cpp.o CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_draw.cpp.o CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_widgets.cpp.o CMakeFiles/ImGuiOpenGLExample.dir/imgui/imgui_tables.cpp.o CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/ImGuiOpenGLExample.dir/imgui/backends/imgui_impl_opengl3.cpp.o | /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
+build sandbox: CXX_EXECUTABLE_LINKER__sandbox_Debug CMakeFiles/sandbox.dir/main.cpp.o CMakeFiles/sandbox.dir/source/window.cpp.o CMakeFiles/sandbox.dir/imgui/imgui.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_demo.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_draw.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_widgets.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_tables.cpp.o CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_opengl3.cpp.o | /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libGL.so  /usr/lib/x86_64-linux-gnu/libGLEW.so  /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
-  OBJECT_DIR = CMakeFiles/ImGuiOpenGLExample.dir
+  OBJECT_DIR = CMakeFiles/sandbox.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = ImGuiOpenGLExample
-  TARGET_PDB = ImGuiOpenGLExample.dbg
+  TARGET_FILE = sandbox
+  TARGET_PDB = sandbox.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target helloWindow
+
+
+#############################################
+# Order-only phony target for helloWindow
+
+build cmake_object_order_depends_target_helloWindow: phony || CMakeFiles/helloWindow.dir
+
+build CMakeFiles/helloWindow.dir/examples/helloWindow.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/examples/helloWindow.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/examples/helloWindow.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/examples
+
+build CMakeFiles/helloWindow.dir/source/window.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/source/window.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/source/window.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/source
+
+build CMakeFiles/helloWindow.dir/imgui/imgui.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/imgui/imgui.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/imgui
+
+build CMakeFiles/helloWindow.dir/imgui/imgui_demo.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_demo.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/imgui/imgui_demo.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/imgui
+
+build CMakeFiles/helloWindow.dir/imgui/imgui_draw.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_draw.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/imgui/imgui_draw.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/imgui
+
+build CMakeFiles/helloWindow.dir/imgui/imgui_widgets.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/imgui/imgui_widgets.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/imgui
+
+build CMakeFiles/helloWindow.dir/imgui/imgui_tables.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/imgui/imgui_tables.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/imgui/imgui_tables.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/imgui
+
+build CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_glfw.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/imgui/backends/imgui_impl_glfw.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_glfw.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/imgui/backends
+
+build CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_opengl3.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/imgui/backends/imgui_impl_opengl3.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_opengl3.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/imgui/backends
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target helloWindow
+
+
+#############################################
+# Link the executable helloWindow
+
+build helloWindow: CXX_EXECUTABLE_LINKER__helloWindow_Debug CMakeFiles/helloWindow.dir/examples/helloWindow.cpp.o CMakeFiles/helloWindow.dir/source/window.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_demo.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_draw.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_widgets.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_tables.cpp.o CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_opengl3.cpp.o | /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
+  FLAGS = -g
+  LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libGL.so  /usr/lib/x86_64-linux-gnu/libGLEW.so  /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = helloWindow
+  TARGET_PDB = helloWindow.dbg
 
 
 #############################################
@@ -156,7 +252,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/michal/PointcloudRenderToolbox/cmake-build-debug
 
-build all: phony ImGuiOpenGLExample
+build all: phony sandbox helloWindow
 
 # =============================================================================
 # Built-in targets
