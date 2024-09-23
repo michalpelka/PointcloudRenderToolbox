@@ -10,7 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add your source files
 set(SOURCES
 
-    source/window.cpp
+    source/PRTWindow.cpp
+    source/PRTAuxDraw.cpp
+    source/CompileShader.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp

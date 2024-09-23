@@ -1,121 +1,154 @@
-#include <GLFW/glfw3.h>
-
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+// Include necessary headers
+#include <GL/glew.h>  // GLEW
+#include <GLFW/glfw3.h>  // GLFW
 #include <iostream>
 
-// Function to create and initialize a window with a context
-GLFWwindow* CreateWindow(const char* title, int width, int height) {
-  GLFWwindow* window = glfwCreateWindow(width, height, title, nullptr, nullptr);
-  if (window == nullptr) {
-    std::cerr << "Failed to create GLFW window: " << title << std::endl;
-    return nullptr;
-  }
-  return window;
+// Vertex shader source code
+const char* vertexShaderSource1 = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+
+void main() {
+    gl_Position = vec4(aPos, 1.0);
+}
+)";
+
+// Fragment shader source code
+const char* fragmentShaderSource1 = R"(
+#version 330 core
+out vec4 FragColor;
+
+void main() {
+    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+}
+)";
+
+// Callback to handle keypresses
+void processInput(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
 
 int main() {
-  // Initialize GLFW
-  if (!glfwInit()) {
-    std::cerr << "Failed to initialize GLFW" << std::endl;
-    return -1;
-  }
+    // Initialize GLFW
+    if (!glfwInit()) {
+        std::cerr << "Failed to initialize GLFW" << std::endl;
+        return -1;
+    }
 
-  // Set OpenGL version and profile
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // Configure GLFW for OpenGL version 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  // Create first window
-  GLFWwindow* window1 = CreateWindow("Window 1", 800, 600);
-  if (!window1) {
+    // Create a window
+    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Triangle", NULL, NULL);
+    if (!window) {
+        std::cerr << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    // Initialize GLEW
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK) {
+        std::cerr << "Failed to initialize GLEW" << std::endl;
+        return -1;
+    }
+
+    // Vertex data for the triangle
+    float vertices[] = {
+        0.0f,  0.5f, 0.0f,   // Top vertex
+        -0.5f, -0.5f, 0.0f,   // Bottom left vertex
+        0.5f, -0.5f, 0.0f    // Bottom right vertex
+    };
+
+    // Create a vertex buffer and vertex array
+    GLuint VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    // Bind the vertex array object
+    glBindVertexArray(VAO);
+
+    // Bind the vertex buffer object and copy the vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Define the vertex attributes (position in this case)
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Create and compile the vertex shader
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource1, NULL);
+    glCompileShader(vertexShader);
+
+    // Check for vertex shader compilation errors
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cerr << "Vertex shader compilation failed: " << infoLog << std::endl;
+    }
+
+    // Create and compile the fragment shader
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource1, NULL);
+    glCompileShader(fragmentShader);
+
+    // Check for fragment shader compilation errors
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cerr << "Fragment shader compilation failed: " << infoLog << std::endl;
+    }
+
+    // Link the vertex and fragment shaders into a shader program
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    // Check for linking errors
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cerr << "Shader program linking failed: " << infoLog << std::endl;
+    }
+
+    // Clean up shaders (no longer needed after linking)
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    // Main render loop
+    while (!glfwWindowShouldClose(window)) {
+        // Process input
+        processInput(window);
+
+        // Clear the screen
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Use the shader program and draw the triangle
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // Swap buffers and poll for events
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    // Clean up resources
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
+
+    // Terminate GLFW
     glfwTerminate();
-    return -1;
-  }
-
-  // Make context current for the first window and initialize OpenGL loader
-  glfwMakeContextCurrent(window1);
-
-  glfwSwapInterval(1); // Enable vsync
-
-  // Create second window
-  GLFWwindow* window2 = CreateWindow("Window 2", 800, 600);
-  if (!window2) {
-    glfwDestroyWindow(window1);
-    glfwTerminate();
-    return -1;
-  }
-
-  // ImGui setup for Window 1
-  IMGUI_CHECKVERSION();
-  ImGuiContext* imgui_context1 = ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO(); (void)io;
-  ImGui::StyleColorsDark();
-  ImGui_ImplGlfw_InitForOpenGL(window1, true);
-  ImGui_ImplOpenGL3_Init("#version 330");
-
-  // ImGui setup for Window 2 (separate context)
-  ImGuiContext* imgui_context2 = ImGui::CreateContext();
-  ImGui::SetCurrentContext(imgui_context2);
-  ImGui_ImplGlfw_InitForOpenGL(window2, true);
-  ImGui_ImplOpenGL3_Init("#version 330");
-
-  // Main loop
-  while (!glfwWindowShouldClose(window1) && !glfwWindowShouldClose(window2)) {
-    // Window 1 rendering
-    glfwMakeContextCurrent(window1);
-    ImGui::SetCurrentContext(imgui_context1);
-
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    ImGui::Begin("Window 1 UI");
-    ImGui::Text("Hello from Window 1!");
-    ImGui::End();
-    ImGui::Render();
-    glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    glfwSwapBuffers(window1);
-
-    // Window 2 rendering
-    glfwMakeContextCurrent(window2);
-    ImGui::SetCurrentContext(imgui_context2);
-
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    ImGui::Begin("Window 2 UI");
-    ImGui::Text("Hello from Window 2!");
-    ImGui::End();
-    ImGui::Render();
-    glClearColor(0.30f, 0.40f, 0.50f, 1.00f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    glfwSwapBuffers(window2);
-
-    // Poll and handle events
-    glfwPollEvents();
-  }
-
-  // Cleanup ImGui for Window 2
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext(imgui_context2);
-
-  // Cleanup ImGui for Window 1
-  glfwMakeContextCurrent(window1);
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
-
-  // Cleanup GLFW
-  glfwDestroyWindow(window1);
-  glfwDestroyWindow(window2);
-  glfwTerminate();
-
-  return 0;
+    return 0;
 }

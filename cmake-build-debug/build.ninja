@@ -56,8 +56,22 @@ build CMakeFiles/sandbox.dir/main.cpp.o: CXX_COMPILER__sandbox_Debug /home/micha
   OBJECT_DIR = CMakeFiles/sandbox.dir
   OBJECT_FILE_DIR = CMakeFiles/sandbox.dir
 
-build CMakeFiles/sandbox.dir/source/window.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/source/window.cpp || cmake_object_order_depends_target_sandbox
-  DEP_FILE = CMakeFiles/sandbox.dir/source/window.cpp.o.d
+build CMakeFiles/sandbox.dir/source/PRTWindow.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/source/PRTWindow.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/source/PRTWindow.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/source
+
+build CMakeFiles/sandbox.dir/source/PRTAuxDraw.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/source/PRTAuxDraw.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/source/PRTAuxDraw.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/sandbox.dir
+  OBJECT_FILE_DIR = CMakeFiles/sandbox.dir/source
+
+build CMakeFiles/sandbox.dir/source/CompileShader.cpp.o: CXX_COMPILER__sandbox_Debug /home/michal/PointcloudRenderToolbox/source/CompileShader.cpp || cmake_object_order_depends_target_sandbox
+  DEP_FILE = CMakeFiles/sandbox.dir/source/CompileShader.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
   OBJECT_DIR = CMakeFiles/sandbox.dir
@@ -120,7 +134,7 @@ build CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_opengl3.cpp.o: CXX_COMPIL
 #############################################
 # Link the executable sandbox
 
-build sandbox: CXX_EXECUTABLE_LINKER__sandbox_Debug CMakeFiles/sandbox.dir/main.cpp.o CMakeFiles/sandbox.dir/source/window.cpp.o CMakeFiles/sandbox.dir/imgui/imgui.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_demo.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_draw.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_widgets.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_tables.cpp.o CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_opengl3.cpp.o | /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
+build sandbox: CXX_EXECUTABLE_LINKER__sandbox_Debug CMakeFiles/sandbox.dir/main.cpp.o CMakeFiles/sandbox.dir/source/PRTWindow.cpp.o CMakeFiles/sandbox.dir/source/PRTAuxDraw.cpp.o CMakeFiles/sandbox.dir/source/CompileShader.cpp.o CMakeFiles/sandbox.dir/imgui/imgui.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_demo.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_draw.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_widgets.cpp.o CMakeFiles/sandbox.dir/imgui/imgui_tables.cpp.o CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/sandbox.dir/imgui/backends/imgui_impl_opengl3.cpp.o | /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libGL.so  /usr/lib/x86_64-linux-gnu/libGLEW.so  /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
   OBJECT_DIR = CMakeFiles/sandbox.dir
@@ -145,8 +159,22 @@ build CMakeFiles/helloWindow.dir/examples/helloWindow.cpp.o: CXX_COMPILER__hello
   OBJECT_DIR = CMakeFiles/helloWindow.dir
   OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/examples
 
-build CMakeFiles/helloWindow.dir/source/window.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/source/window.cpp || cmake_object_order_depends_target_helloWindow
-  DEP_FILE = CMakeFiles/helloWindow.dir/source/window.cpp.o.d
+build CMakeFiles/helloWindow.dir/source/PRTWindow.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/source/PRTWindow.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/source/PRTWindow.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/source
+
+build CMakeFiles/helloWindow.dir/source/PRTAuxDraw.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/source/PRTAuxDraw.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/source/PRTAuxDraw.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++11
+  INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
+  OBJECT_DIR = CMakeFiles/helloWindow.dir
+  OBJECT_FILE_DIR = CMakeFiles/helloWindow.dir/source
+
+build CMakeFiles/helloWindow.dir/source/CompileShader.cpp.o: CXX_COMPILER__helloWindow_Debug /home/michal/PointcloudRenderToolbox/source/CompileShader.cpp || cmake_object_order_depends_target_helloWindow
+  DEP_FILE = CMakeFiles/helloWindow.dir/source/CompileShader.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   INCLUDES = -I/home/michal/PointcloudRenderToolbox/imgui -I/home/michal/PointcloudRenderToolbox/imgui/backends -I/home/michal/PointcloudRenderToolbox/include
   OBJECT_DIR = CMakeFiles/helloWindow.dir
@@ -209,7 +237,7 @@ build CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_opengl3.cpp.o: CXX_CO
 #############################################
 # Link the executable helloWindow
 
-build helloWindow: CXX_EXECUTABLE_LINKER__helloWindow_Debug CMakeFiles/helloWindow.dir/examples/helloWindow.cpp.o CMakeFiles/helloWindow.dir/source/window.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_demo.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_draw.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_widgets.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_tables.cpp.o CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_opengl3.cpp.o | /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
+build helloWindow: CXX_EXECUTABLE_LINKER__helloWindow_Debug CMakeFiles/helloWindow.dir/examples/helloWindow.cpp.o CMakeFiles/helloWindow.dir/source/PRTWindow.cpp.o CMakeFiles/helloWindow.dir/source/PRTAuxDraw.cpp.o CMakeFiles/helloWindow.dir/source/CompileShader.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_demo.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_draw.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_widgets.cpp.o CMakeFiles/helloWindow.dir/imgui/imgui_tables.cpp.o CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/helloWindow.dir/imgui/backends/imgui_impl_opengl3.cpp.o | /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libGL.so  /usr/lib/x86_64-linux-gnu/libGLEW.so  /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
   OBJECT_DIR = CMakeFiles/helloWindow.dir
