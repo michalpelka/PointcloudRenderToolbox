@@ -20,3 +20,28 @@ int PointcloudToolbox::Util::compileShader(GLenum type, const char* source)
     }
     return shader;
 }
+
+int PointcloudToolbox::Util::createShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource)
+{
+    int vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
+    int fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+
+    int shaderProgram = glCreateProgram();
+    GL_CALL(glAttachShader(shaderProgram, vertexShader));
+    GL_CALL(glAttachShader(shaderProgram, fragmentShader));
+    GL_CALL(glLinkProgram(shaderProgram));
+
+    int success;
+    char infoLog[512];
+    GL_CALL(glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success));
+    if (!success)
+    {
+        GL_CALL(glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog));
+        std::cerr << "Shader Linking Failed: " << infoLog << std::endl;
+    }
+
+    GL_CALL(glDeleteShader(vertexShader));
+    GL_CALL(glDeleteShader(fragmentShader));
+
+    return shaderProgram;
+}

@@ -8,9 +8,16 @@
 const char* vertexShaderSource = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aColor;
+
+out vec4 v_color;
+
+uniform mat4 view;
+uniform mat4 projection;
 
 void main() {
-    gl_Position = vec4(aPos, 1.0);
+    gl_Position = projection * view * vec4(aPos, 1.0);
+    v_color = vec4(aColor,1.0);
 }
 )";
 
@@ -19,46 +26,52 @@ const char* fragmentShaderSource = R"(
 #version 330 core
 out vec4 FragColor;
 
+in vec4 v_color;
+
 void main() {
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+    FragColor = v_color;
+}
+)";
+
+const char* vertexShaderSourcePoints = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aColor;
+layout (location = 2) in float fPointSize;
+
+out vec4 v_color;
+
+uniform mat4 view;
+uniform mat4 projection;
+
+void main() {
+    gl_PointSize = fPointSize;
+    gl_Position = projection * view * vec4(aPos, 1.0);
+    v_color = vec4(aColor,1.0);
+}
+)";
+
+// Fragment Shader
+const char* fragmentShaderSourcePoints = R"(
+#version 330 core
+out vec4 FragColor;
+
+in vec4 v_color;
+
+void main() {
+    FragColor = v_color;
 }
 )";
 
 namespace PointcloudToolbox
 {
-    float vertices[] = {
-        0.0f,  0.5f, 0.0f,   // Top vertex
-        -0.5f, -0.5f, 0.0f,   // Bottom left vertex
-        0.5f, -0.5f, 0.0f    // Bottom right vertex
-    };
 
     void AuxDraw::CompileShaders()
     {
-        // create coordinate system
-//        DrawLine(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0));
-//        DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));
-//        DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1));
+        m_shaderProgramLines = PointcloudToolbox::Util::createShaderProgram(vertexShaderSource, fragmentShaderSource);
+        m_shaderProgramPoints = PointcloudToolbox::Util::createShaderProgram(vertexShaderSourcePoints, fragmentShaderSourcePoints);
 
-        m_drawVerticesLines.push_back(glm::vec3(0.0f,  0.5f, 0.0f));
-        m_drawVerticesLines.push_back(glm::vec3(-0.5f, -0.5f, 0.0f));
-        m_drawVerticesLines.push_back(glm::vec3( 0.5f, -0.5f, 0.0f ));
-        int vertexShader = Util::compileShader(GL_VERTEX_SHADER, vertexShaderSource);
-        int fragmentShader = Util::compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-        m_shaderProgram = glCreateProgram();
-        GL_CALL(glAttachShader(m_shaderProgram, vertexShader));
-        GL_CALL(glAttachShader(m_shaderProgram, fragmentShader));
-        GL_CALL(glLinkProgram(m_shaderProgram));
-        int success;
-        char infoLog[512];
-        glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &success);
-        if (!success)
-        {
-            glGetProgramInfoLog(m_shaderProgram, 512, nullptr, infoLog);
-            std::cerr << "Shader Linking Failed: " << infoLog << std::endl;
-        }
-        GL_CALL(glDeleteShader(vertexShader));
-        GL_CALL(glDeleteShader(fragmentShader));
-
+        // setup line drawing
         GL_CALL(glGenVertexArrays(1, &m_lineVAO));
         GL_CALL(glGenBuffers(1, &m_lineVertexVBO));
 
@@ -66,43 +79,114 @@ namespace PointcloudToolbox
 
         GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_lineVertexVBO));
         // Bind the vertex buffer object and copy the vertex data
-        std::cout << "Size of m_drawVerticesLines: " << sizeof(glm::vec3) << std::endl;
-        GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
+        GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_drawVerticesLinesBuffer.size()*sizeof(float), m_drawVerticesLinesBuffer.data(), GL_DYNAMIC_DRAW));
 
 
-        // Define the vertex attributes (position in this case)
-        GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
-        GL_CALL(glEnableVertexAttribArray(0));
+        // Position attribute (location = 0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        // Color attribute (location = 1)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        // setup point drawing
+        GL_CALL(glGenVertexArrays(1, &m_PointsVAO));
+        GL_CALL(glGenBuffers(1, &m_PointsVertexVBO));
+
+        GL_CALL(glBindVertexArray(m_PointsVAO));
+
+        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_PointsVertexVBO));
+        // Bind the vertex buffer object and copy the vertex data
+        GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_drawVerticesPointsBuffer.size()*sizeof(float), m_drawVerticesPointsBuffer.data(), GL_DYNAMIC_DRAW));
+
+        // Position attribute (location = 0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        // Color attribute (location = 1)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        // Point size attribute (location = 2)
+        glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
+        glEnableVertexAttribArray(2);
 
     }
+
+    void AuxDraw::DrawPoint(glm::vec3 point, glm::vec3 color, float size)
+    {
+        m_drawVerticesPointsBuffer.push_back(point.x);
+        m_drawVerticesPointsBuffer.push_back(point.y);
+        m_drawVerticesPointsBuffer.push_back(point.z);
+        m_drawVerticesPointsBuffer.push_back(color.x);
+        m_drawVerticesPointsBuffer.push_back(color.y);
+        m_drawVerticesPointsBuffer.push_back(color.z);
+        m_drawVerticesPointsBuffer.push_back(size);
+
+        m_drawPointsCount += 1;
+    }
+
     void AuxDraw::DrawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color)
     {
-        m_drawVerticesLines.push_back(start);
-        m_drawVerticesLines.push_back(color);
-        m_drawVerticesLines.push_back(end);
-        m_drawVerticesLines.push_back(color);
+        m_drawVerticesLinesBuffer.push_back(start.x);
+        m_drawVerticesLinesBuffer.push_back(start.y);
+        m_drawVerticesLinesBuffer.push_back(start.z);
+        m_drawVerticesLinesBuffer.push_back(color.x);
+        m_drawVerticesLinesBuffer.push_back(color.y);
+        m_drawVerticesLinesBuffer.push_back(color.z);
+        m_drawVerticesLinesBuffer.push_back(end.x);
+        m_drawVerticesLinesBuffer.push_back(end.y);
+        m_drawVerticesLinesBuffer.push_back(end.z);
+        m_drawVerticesLinesBuffer.push_back(color.x);
+        m_drawVerticesLinesBuffer.push_back(color.y);
+        m_drawVerticesLinesBuffer.push_back(color.z);
+
+        m_drawVerticesLinesCount += 2;
     }
 
-    void AuxDraw::IssueDrawCalls()
+    void AuxDraw::IssueDrawCalls(const glm::mat4& view, const glm::mat4& projection)
     {
-        //GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * m_drawVerticesLines.size(), m_drawVerticesLines.data(),GL_DYNAMIC_DRAW));
 
-        //set uniforms
-        // View and Projection matrices
-        glm::mat4 view = glm::lookAt(glm::vec3(0,0,1), glm::vec3(0,0,0), glm::vec3(0,0,1));
-        glm::mat4 projection = glm::perspective(glm::radians(90.f), 800.0f / 600.0f, 0.1f, 100.0f);
+        GL_CALL(glEnable(GL_PROGRAM_POINT_SIZE));
 
-
+        //points
+        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_PointsVertexVBO));
+        GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_drawVerticesPointsBuffer.size()*sizeof(float), m_drawVerticesPointsBuffer.data(), GL_DYNAMIC_DRAW));
+        GL_CALL(glUseProgram(m_shaderProgramPoints));
         // Set uniform matrices in the shader
-//        int viewLoc = glGetUniformLocation(m_shaderProgram, "view");
-//        int projectionLoc = glGetUniformLocation(m_shaderProgram, "projection");
-//        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-//        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        const GLint viewLocPoints = glGetUniformLocation(m_shaderProgramPoints, "view");
+        CheckUniformLocation(viewLocPoints, "view");
+        const GLint projectionLocPoints = glGetUniformLocation(m_shaderProgramPoints, "projection");
+        CheckUniformLocation(projectionLocPoints, "projection");
+        GL_CALL(glUniformMatrix4fv(viewLocPoints, 1, GL_FALSE, glm::value_ptr(view)));
+        GL_CALL(glUniformMatrix4fv(projectionLocPoints, 1, GL_FALSE, glm::value_ptr(projection)));
+        GL_CALL(glBindVertexArray(m_PointsVAO));
+        GL_CALL(glDrawArrays(GL_POINTS, 0, m_drawPointsCount));
 
 
-        GL_CALL(glUseProgram(m_shaderProgram));
+        // lines
+        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_lineVertexVBO));
+        GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_drawVerticesLinesBuffer.size()*sizeof(float), m_drawVerticesLinesBuffer.data(), GL_DYNAMIC_DRAW));
+        GL_CALL(glUseProgram(m_shaderProgramLines));
+        // Set uniform matrices in the shader
+        const GLint viewLoc = glGetUniformLocation(m_shaderProgramLines, "view");
+        CheckUniformLocation(viewLoc, "view");
+        const GLint projectionLoc = glGetUniformLocation(m_shaderProgramLines, "projection");
+        CheckUniformLocation(projectionLoc, "projection");
+        GL_CALL(glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view)));
+        GL_CALL(glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection)));
         GL_CALL(glBindVertexArray(m_lineVAO));
-        GL_CALL(glDrawArrays(GL_TRIANGLES, 0, 3));
+        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_lineVertexVBO));
+        GL_CALL(glDrawArrays(GL_LINES, 0, m_drawVerticesLinesCount));
+
+
+        // clear the buffer, to simulate a one-time draw
+        m_drawVerticesLinesCount = 0;
+        m_drawVerticesLinesBuffer.clear();
+
+        m_drawPointsCount = 0;
+        m_drawVerticesPointsBuffer.clear();
 
     }
 } // namespace PointcloudToolbox

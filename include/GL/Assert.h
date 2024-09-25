@@ -16,6 +16,19 @@
         }                                                                                                                                  \
     } while (false)
 
+static bool CheckUniformLocation(GLint location, const char* name)
+{
+    if (location == GL_INVALID_VALUE)
+    {
+        std::cerr << "Uniform " << name << " GL_INVALID_VALUE" << std::endl;
+    }
+    if (location == GL_INVALID_OPERATION)
+    {
+        std::cerr << "Uniform " << name << " GL_INVALID_OPERATION" << std::endl;
+    }
+    assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+    return location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION;
+}
 // Helper function to convert OpenGL error code to string (optional, for more readable errors)
 static const char* GetGLErrorString(GLenum error)
 {

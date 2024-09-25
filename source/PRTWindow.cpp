@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h> // GLFW
 #include <iostream>
 
+#include <GL/Assert.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -11,13 +12,41 @@
 namespace PointcloudToolbox
 {
 
+    MouseButton MouseButtonFromGLFW(int button)
+    {
+        switch (button)
+        {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            return MouseButton::PRT_LEFT_BUTTON;
+        case GLFW_MOUSE_BUTTON_RIGHT:
+            return MouseButton::PRT_RIGHT_BUTTON;
+        case GLFW_MOUSE_BUTTON_MIDDLE:
+            return MouseButton::PRT_MIDDLE_BUTTON;
+        default:
+            return MouseButton::PRT_LEFT_BUTTON;
+        }
+    }
+
+    MouseAction MouseActionFromGLFW(int action)
+    {
+        switch (action)
+        {
+        case GLFW_PRESS:
+            return MouseAction::PRT_DOWN;
+        case GLFW_RELEASE:
+            return MouseAction::PRT_UP;
+        default:
+            return MouseAction::PRT_DOWN;
+        }
+    }
+
     bool IsGLFWWindowFocused(GLFWwindow* window)
     {
         const auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
         return windowData->inFocus;
     }
 
-    void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    void GLFW_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
         if (IsGLFWWindowFocused(window))
         {
@@ -27,35 +56,55 @@ namespace PointcloudToolbox
         }
     }
 
-    void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+    void GLFW_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
     {
+        std::cout << "Mouse button callback" << button << " a " << action << std::endl;
         const auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
         std::string windowTitle = windowData->title;
         if (IsGLFWWindowFocused(window))
         {
-            const auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
+            auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
             ImGui::SetCurrentContext(windowData->cntx_imGui);
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+
+            if (!ImGui::GetIO().WantCaptureMouse && windowData->m_mouseButtonCallback)
+            {
+                double xpos, ypos;
+                glfwGetCursorPos(window, &xpos, &ypos);
+                auto buttonGlutLike = MouseButtonFromGLFW(button);
+                windowData->m_mouseButtonCallback(buttonGlutLike, MouseActionFromGLFW(action), xpos, ypos);
+            }
         }
     }
 
-    void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+    void GLFW_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
     {
         if (IsGLFWWindowFocused(window))
         {
             const auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
             ImGui::SetCurrentContext(windowData->cntx_imGui);
             ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+
+            if (!ImGui::GetIO().WantCaptureMouse && windowData->m_mouseWheelCallback)
+            {
+                double xpos, ypos;
+                glfwGetCursorPos(window, &xpos, &ypos);
+                windowData->m_mouseWheelCallback(0, yoffset, xpos, ypos);
+            }
         }
     }
 
-    void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+    void GLFW_CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
     {
         if (IsGLFWWindowFocused(window))
         {
             const auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
             ImGui::SetCurrentContext(windowData->cntx_imGui);
             ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
+            if (!ImGui::GetIO().WantCaptureMouse && windowData->m_motionCallback)
+            {
+                windowData->m_motionCallback(xpos, ypos);
+            }
         }
     }
 
@@ -68,8 +117,12 @@ namespace PointcloudToolbox
             ImGui_ImplGlfw_CharCallback(window, c);
         }
     }
+    void GLFW_WindowScaleCallback(GLFWwindow* window, float xscale, float yscale)
+    {
+        const auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
+    }
 
-    WindowHandle CreateWindow(std::string title, int width, int height)
+    WindowHandle CreateWindow(std::string title, int width, int height, std::vector<std::shared_ptr<DrawBase>> drawables)
     {
         internal::nextHandle++;
         internal::windows[internal::nextHandle] = { .title = title, .width = width, .height = height, .visible = true };
@@ -106,10 +159,10 @@ namespace PointcloudToolbox
         ImGui_ImplOpenGL3_Init("#version 330");
 
         glfwSetWindowUserPointer(glfwWindow, &windowData);
-        glfwSetCursorPosCallback(glfwWindow, CursorPosCallback);
-        glfwSetMouseButtonCallback(glfwWindow, MouseButtonCallback);
-        glfwSetScrollCallback(glfwWindow, ScrollCallback);
-        glfwSetKeyCallback(glfwWindow, KeyCallback);
+        glfwSetCursorPosCallback(glfwWindow, GLFW_CursorPosCallback);
+        glfwSetMouseButtonCallback(glfwWindow, GLFW_MouseButtonCallback);
+        glfwSetScrollCallback(glfwWindow, GLFW_ScrollCallback);
+        glfwSetKeyCallback(glfwWindow, GLFW_KeyCallback);
         glfwSetCharCallback(glfwWindow, CharCallback);
         glfwSetCursorEnterCallback(
             glfwWindow,
@@ -127,8 +180,13 @@ namespace PointcloudToolbox
                 windowData->inFocus = focused;
             });
 
-        // intialize aux draw
-        windowData.auxDraw.CompileShaders();
+        glfwSetWindowContentScaleCallback(glfwWindow, GLFW_WindowScaleCallback);
+
+        windowData.m_drawables = drawables;
+        for (auto& drawable : windowData.m_drawables)
+        {
+            drawable->CompileShaders();
+        }
         return internal::nextHandle;
     }
 
@@ -154,7 +212,7 @@ namespace PointcloudToolbox
 
     void SetWindowImGuiRenderCallback(WindowHandle handle, std::function<void()> renderCallback)
     {
-        internal::windows[handle].ImGuiRender = renderCallback;
+        internal::windows[handle].m_ImGuiRender = renderCallback;
     }
 
     void InitWindowSystem()
@@ -175,6 +233,7 @@ namespace PointcloudToolbox
 
         internal::initialized = true;
     }
+
     void DestroyWindowSystem()
     {
         if (internal::initialized)
@@ -193,7 +252,11 @@ namespace PointcloudToolbox
 
         glfwTerminate();
     }
-
+    WindowData& internal::GetWindowData(WindowHandle handle)
+    {
+        assert(internal::windows.find(handle) != internal::windows.end());
+        return internal::windows[handle];
+    }
     void RenderWindow(const WindowHandle handle)
     {
         assert(internal::initialized);
@@ -216,26 +279,31 @@ namespace PointcloudToolbox
             glfwHideWindow(glfwWindow);
             return;
         }
+        int width = 0, height = 0;
+        glfwGetWindowSize(glfwWindow, &width, &height);
+        GL_CALL(glViewport(0, 0, width, height));
+
         // imgui context
         ImGui::SetCurrentContext(windowData.cntx_imGui);
 
         // Clear the screen
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        GL_CALL(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
+        GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
 
-        //draw aux
-        windowData.auxDraw.IssueDrawCalls();
+        // User's drawables
+        for (auto& drawable : windowData.m_drawables)
+        {
+            drawable->IssueDrawCalls(windowData.m_viewMatrix, windowData.m_projectionMatrix);
+        }
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        ImGui::Begin("Hello, ImGui!");
-        ImGui::Text("Window %s", windowData.title.c_str());
-        ImGui::End();
 
-        if (windowData.ImGuiRender)
+        // User's ImGui render callback
+        if (windowData.m_ImGuiRender)
         {
-            windowData.ImGuiRender();
+            windowData.m_ImGuiRender();
         }
 
         ImGui::Render();
@@ -246,37 +314,75 @@ namespace PointcloudToolbox
 
     void ShowWindow(WindowHandle handle)
     {
-        assert(internal::windows.find(handle) != internal::windows.end());
-        auto& windowData = internal::windows[handle];
+        auto& windowData = internal::GetWindowData(handle);
         windowData.visible = true;
         glfwShowWindow((GLFWwindow*)windowData.NativeWindowPointer);
     }
 
     void HideWindow(WindowHandle handle)
     {
-        assert(internal::windows.find(handle) != internal::windows.end());
-        auto& windowData = internal::windows[handle];
+        auto& windowData = internal::GetWindowData(handle);
         windowData.visible = false;
         glfwHideWindow((GLFWwindow*)windowData.NativeWindowPointer);
     }
 
     bool IsWindowVisible(WindowHandle handle)
     {
-        assert(internal::windows.find(handle) != internal::windows.end());
-        auto& windowData = internal::windows[handle];
+        auto& windowData = internal::GetWindowData(handle);
         return windowData.visible;
     }
 
-    void SetViewMatrix(WindowHandle handle, const std::array<float, 16> viewMatrix)
+    void SetMouseCallback(WindowHandle handle, MouseButtonCallback callback)
     {
-        assert(internal::windows.find(handle) != internal::windows.end());
-        auto& windowData = internal::windows[handle];
-        //  windowData.viewMatrix = viewMatrix;
+        auto& windowData = internal::GetWindowData(handle);
+        windowData.m_mouseButtonCallback = callback;
     }
 
-    AuxDraw& GetAuxDraw(const WindowHandle handle)
+    void SetMotionCallback(WindowHandle handle, MotionCallback callback)
     {
-        assert(internal::windows.find(handle) != internal::windows.end());
-        return internal::windows[handle].auxDraw;
+        auto& windowData = internal::GetWindowData(handle);
+        windowData.m_motionCallback = callback;
     }
+
+    void SetViewAndProjectionMatrix(WindowHandle handle, glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
+    {
+        auto& windowData = internal::GetWindowData(handle);
+        windowData.m_viewMatrix = viewMatrix;
+        windowData.m_projectionMatrix = projectionMatrix;
+    }
+
+    void SetMouseWheelCallback(WindowHandle handle, MouseWheelCallback callback)
+    {
+        auto& windowData = internal::GetWindowData(handle);
+        windowData.m_mouseWheelCallback = callback;
+    }
+
+    std::pair<float, float> GetWindowSize(WindowHandle handle)
+    {
+        auto& windowData = internal::GetWindowData(handle);
+        return { windowData.width, windowData.height };
+    }
+
+    std::unordered_set<MouseButton> GetPressedMouseButtons(WindowHandle handle)
+    {
+        auto& windowData = internal::GetWindowData(handle);
+        auto glfwWindow = (GLFWwindow*)windowData.NativeWindowPointer;
+        assert(glfwWindow);
+        std::unordered_set<MouseButton> buttons;
+        for (int i = 0; i < GLFW_MOUSE_BUTTON_LAST; i++)
+        {
+            if (glfwGetMouseButton((GLFWwindow*)windowData.NativeWindowPointer, i) == GLFW_PRESS)
+            {
+                buttons.insert(MouseButtonFromGLFW(i));
+            }
+        }
+        return buttons;
+    }
+
+    std::vector<std::shared_ptr<DrawBase>>& GetDrawables(const WindowHandle handle)
+    {
+        auto& windowData = internal::GetWindowData(handle);
+        return internal::windows[handle].m_drawables;
+    }
+
 } // namespace PointcloudToolbox
