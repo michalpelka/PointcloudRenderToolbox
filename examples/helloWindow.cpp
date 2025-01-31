@@ -1,6 +1,6 @@
 #include <PRTWindow.h>
 #include <iostream>
-
+#include <PRTPointcloud.h>
 
 void SetSceneLook(PointcloudToolbox::WindowHandle windowHandle,
                   float translate_x, float translate_y, float translate_z, float rotate_x, float rotate_y)
@@ -24,7 +24,7 @@ int main()
     float mouse_old_x, mouse_old_y = 0.0;
     PointcloudToolbox::InitWindowSystem();
     const auto window1Handle = PointcloudToolbox::CreateWindow("Hello Window1", 800, 600);
-    //    const auto window2Handle = PointcloudToolbox::CreateWindow("Hello Window2", 800, 600);
+//    const auto window2Handle = PointcloudToolbox::CreateWindow("Hello Window2", 800, 600);
 
     glm::vec2 eye_pos(10.0f, 0.0f);
     glm::vec2 last_mouse_pos(-1.0f, 0.0f);
@@ -86,17 +86,35 @@ int main()
 
     assert(auxDraw != nullptr);
 
+
+    auto pcDraw = PointcloudToolbox::GetDrawable<PointcloudToolbox::PointcloudDraw>(window1Handle);
+
     float length = 1.0;
+
+    //clang-format off
+    std::vector<float> pointcloud;
+    for (int i = 0; i < 10000; i++)
+    {
+            pointcloud.push_back(sin(M_PI*1.0*i/100));
+            pointcloud.push_back(cos(M_PI*1.0*i/100));
+            pointcloud.push_back(0);
+            pointcloud.push_back(1.0f);
+            pointcloud.push_back(0.0f);
+            pointcloud.push_back(0.0f);
+    }
+    //clang-format on
+    pcDraw->AcquirePointcloudHandle(glm::mat4(1.0f), pointcloud.data(), 1000, PointcloudToolbox::PointcloudDraw::DataLayout::DATALAYOUT_XYZFLOAT_RGBFLOAT);
+
     while (PointcloudToolbox::IsWindowVisible(window1Handle))
     {
 
         auxDraw->DrawLine(glm::vec3(0, 0, 0), glm::vec3(length,0,0), glm::vec3(1, 0, 0));
         auxDraw->DrawLine(glm::vec3(0, 0, 0), glm::vec3(0,length,0), glm::vec3(0, 1, 0));
         auxDraw->DrawLine(glm::vec3(0, 0, 0), glm::vec3(0,0,length), glm::vec3(0, 0, 1));
-        auxDraw->DrawPoint(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 10.0f);
-        auxDraw->DrawPoint(glm::vec3(length, 0, 0), glm::vec3(1, 0, 0), 5.0f);
-        auxDraw->DrawPoint(glm::vec3(0, length, 0), glm::vec3(0, 1, 0), 5.0f);
-        auxDraw->DrawPoint(glm::vec3(0, 0, length), glm::vec3(0, 0, 1), 5.0f);
+//        auxDraw->DrawPoint(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 10.0f);
+//        auxDraw->DrawPoint(glm::vec3(length, 0, 0), glm::vec3(1, 0, 0), 5.0f);
+//        auxDraw->DrawPoint(glm::vec3(0, length, 0), glm::vec3(0, 1, 0), 5.0f);
+//        auxDraw->DrawPoint(glm::vec3(0, 0, length), glm::vec3(0, 0, 1), 5.0f);
         PointcloudToolbox::SetWindowImGuiRenderCallback(window1Handle, [&]()
         {
             ImGui::Begin("Hello, world!");
@@ -105,9 +123,20 @@ int main()
         });
         PointcloudToolbox::RenderWindow(window1Handle);
 
+//        PointcloudToolbox::SetWindowImGuiRenderCallback(window2Handle, [&]()
+//        {
+//            ImGui::Begin("Hello, world window2!");
+//            ImGui::SliderFloat("Length", &length, 0.0f, 10.0f);
+//            ImGui::End();
+//        });
+
+//        PointcloudToolbox::RenderWindow(window2Handle);
+
+
     }
     PointcloudToolbox::DestroyWindow(window1Handle);
-    //    PointcloudToolbox::DestroyWindow(window2Handle);
+//    PointcloudToolbox::DestroyWindow(window2Handle);
+
     PointcloudToolbox::DestroyWindowSystem();
     return 0;
 }

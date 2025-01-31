@@ -1,4 +1,0 @@
-/home/michal/PointcloudRenderToolbox/cmake-build-debug/CMakeFiles/sandbox.dir
-/home/michal/PointcloudRenderToolbox/cmake-build-debug/CMakeFiles/helloWindow.dir
-/home/michal/PointcloudRenderToolbox/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/michal/PointcloudRenderToolbox/cmake-build-debug/CMakeFiles/rebuild_cache.dir

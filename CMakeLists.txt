@@ -12,6 +12,7 @@ set(SOURCES
 
     source/PRTWindow.cpp
     source/PRTAuxDraw.cpp
+    source/PRTPointcloud.cpp
     source/CompileShader.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp

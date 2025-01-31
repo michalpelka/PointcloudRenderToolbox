@@ -8,6 +8,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include <imgui_impl_opengl3.h>
 // GLFW implemetation
 namespace PointcloudToolbox
 {
@@ -148,6 +149,12 @@ namespace PointcloudToolbox
         }
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+
         // Setup Platform/Renderer bindings
 
         windowData.cntx_imGui = ImGui::CreateContext();
@@ -259,6 +266,8 @@ namespace PointcloudToolbox
     }
     void RenderWindow(const WindowHandle handle)
     {
+
+
         assert(internal::initialized);
         assert(internal::windows.find(handle) != internal::windows.end());
 
@@ -286,14 +295,17 @@ namespace PointcloudToolbox
         // imgui context
         ImGui::SetCurrentContext(windowData.cntx_imGui);
 
+
         // Clear the screen
         GL_CALL(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
         GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
-
+        DrawBaseStats stats;
         // User's drawables
         for (auto& drawable : windowData.m_drawables)
         {
             drawable->IssueDrawCalls(windowData.m_viewMatrix, windowData.m_projectionMatrix);
+            const auto thisDrawStats = drawable->GetStatsForDrawCall();
+            stats += thisDrawStats;
         }
 
         ImGui_ImplOpenGL3_NewFrame();
@@ -306,6 +318,26 @@ namespace PointcloudToolbox
             windowData.m_ImGuiRender();
         }
 
+        ImGui::ShowDemoWindow(nullptr);
+        // In your render loop, directly render text
+        ImGui::SetNextWindowPos(ImVec2(10, 10));  // Position it at top-left corner
+        ImGui::SetNextWindowSize(ImVec2(0, 0));   // Automatically size based on text
+
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f,1.0f, 1.0f, 1.0f));
+        ImGui::Begin("TextOverlay", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove);
+
+        // Display your statistics as plain text
+        ImGui::Text("Frame rate: %.1f FPS", ImGui::GetIO().Framerate);
+        ImGui::Text("Draw Calls: %d", stats.m_numberOfDrawCalls);
+        ImGui::Text("Total vertices : %d", stats.m_numberOfVertex);
+        //view matrix
+        ImGui::Text("View Matrix");
+        for (int i = 0; i < 4; i++)
+        {
+            ImGui::Text("%f %f %f %f", windowData.m_viewMatrix[i][0], windowData.m_viewMatrix[i][1], windowData.m_viewMatrix[i][2], windowData.m_viewMatrix[i][3]);
+        }
+        ImGui::End();
+        ImGui::PopStyleColor();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers((GLFWwindow*)windowData.NativeWindowPointer);
@@ -385,4 +417,15 @@ namespace PointcloudToolbox
         return internal::windows[handle].m_drawables;
     }
 
+    glm::mat4 GetViewMatrix(WindowHandle handle)
+    {
+            auto& windowData = internal::GetWindowData(handle);
+            return windowData.m_viewMatrix;
+    }
+
+    glm::mat4 GetProjectionMatrix(WindowHandle handle)
+    {
+            auto& windowData = internal::GetWindowData(handle);
+            return windowData.m_projectionMatrix;
+    }
 } // namespace PointcloudToolbox

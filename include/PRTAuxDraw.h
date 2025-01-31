@@ -20,12 +20,14 @@ namespace PointcloudToolbox
         // DrawBase overrides ...
         void IssueDrawCalls(const glm::mat4& view, const glm::mat4& projection) override;
         void CompileShaders() override;
+        DrawBaseStats GetStatsForDrawCall() override;
 
     private:
 
 
         int m_shaderProgramLines{ 0 };
         int m_shaderProgramPoints{ 0 };
+        int m_shaderProgramGrid{ 0 };
         // line drawing
         std::vector<float> m_drawVerticesLinesBuffer;
         int m_drawVerticesLinesCount{ 0 };
@@ -38,7 +40,8 @@ namespace PointcloudToolbox
         GLuint m_PointsVertexVBO{ 0 };
 
 
-
+    private:
+        DrawBaseStats m_stats;
     };
 
 } // namespace PointcloudToolbox

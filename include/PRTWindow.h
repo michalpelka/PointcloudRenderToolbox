@@ -1,5 +1,6 @@
 #pragma once
 #include "PRTAuxDraw.h"
+#include "PRTPointcloud.h"
 #include <functional>
 #include <imgui.h>
 #include <memory>
@@ -78,7 +79,7 @@ namespace PointcloudToolbox
     } // namespace internal
 
     //! Create a new window and return its handle.
-    WindowHandle CreateWindow(std::string title, int width, int height, std::vector<std::shared_ptr<DrawBase>> drawables = {std::make_shared<AuxDraw>()});
+    WindowHandle CreateWindow(std::string title, int width, int height, std::vector<std::shared_ptr<DrawBase>> drawables = {std::make_shared<AuxDraw>(), std::make_shared<PointcloudDraw>()});
 
     //! Destroy the window with the given handle.
     void DestroyWindow(WindowHandle handle);
@@ -99,6 +100,10 @@ namespace PointcloudToolbox
     void SetMouseWheelCallback(WindowHandle handle, MouseWheelCallback callback);
 
     void SetViewAndProjectionMatrix(WindowHandle handle, glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
+
+    glm::mat4 GetViewMatrix(WindowHandle handle);
+
+    glm::mat4 GetProjectionMatrix(WindowHandle handle);
 
     void DestroyWindow(WindowHandle handle);
     void ShowWindow(WindowHandle handle);

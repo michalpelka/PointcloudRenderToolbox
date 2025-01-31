@@ -63,6 +63,64 @@ void main() {
 }
 )";
 
+
+// inifinite grid vs shader
+const char* vertexShaderSourceGrid = R"(
+#version 330 core
+
+uniform mat4 view;
+uniform mat4 projection;
+
+uniform float gGridSize = 1000.0;
+out vec4 worldPos;
+const vec3 Pos[4] = vec3[4](
+    vec3(-1.0, -1.0, 0.0),      // bottom left
+    vec3( 1.0, -1.0, 0.0),      // bottom right
+    vec3( 1.0, 1.0,  0.0),      // top right
+    vec3(-1.0, 1.0,  0.0)       // top left
+);
+const int Indices[6] = int[6](0, 2, 1, 2, 0, 3);
+
+mat4 viewNoTranslation = mat4(
+        vec4(view[0][0], view[0][1], view[0][2], view[0][3]),
+        vec4(view[1][0], view[1][1], view[1][2], view[1][3]),
+        vec4(view[2][0], view[2][1], view[2][2], view[2][3]),
+        vec4(0, 0, view[3][2], view[3][3]));
+
+void main()
+{
+    int Index = Indices[gl_VertexID];
+    vec3 vPos3 = Pos[Index] * gGridSize;
+    vec4 vPos4 = vec4(vPos3, 1.0);
+    worldPos = vPos4;
+
+    gl_Position = projection * view *  vPos4;
+
+}
+
+)";
+
+const char* fragmentShaderSourceGrid = R"(
+#version 330 core
+out vec4 FragColor;
+in vec4 worldPos;
+
+void main() {
+    float i =0;
+    const float gridSize = 1.f;
+    float lx = worldPos.x - gridSize * round(worldPos.x*gridSize);
+    float ly = worldPos.y - gridSize * round(worldPos.y*gridSize);
+
+    float distanceToLineX = abs(lx);
+    float distanceToLineY = abs(ly);
+    float distanceToLine = min(distanceToLineX,distanceToLineY);
+    i = mix(0,1.0,distanceToLine*50);
+
+
+    FragColor = vec4(i,i,i,i);
+}
+)";
+
 namespace PointcloudToolbox
 {
 
@@ -70,6 +128,7 @@ namespace PointcloudToolbox
     {
         m_shaderProgramLines = PointcloudToolbox::Util::createShaderProgram(vertexShaderSource, fragmentShaderSource);
         m_shaderProgramPoints = PointcloudToolbox::Util::createShaderProgram(vertexShaderSourcePoints, fragmentShaderSourcePoints);
+        m_shaderProgramGrid = PointcloudToolbox::Util::createShaderProgram(vertexShaderSourceGrid, fragmentShaderSourceGrid);
 
         // setup line drawing
         GL_CALL(glGenVertexArrays(1, &m_lineVAO));
@@ -150,6 +209,17 @@ namespace PointcloudToolbox
 
         GL_CALL(glEnable(GL_PROGRAM_POINT_SIZE));
 
+        // grid
+        GL_CALL(glUseProgram(m_shaderProgramGrid));
+        const GLint viewLocGrid = glGetUniformLocation(m_shaderProgramGrid, "view");
+        CheckUniformLocation(viewLocGrid, "view");
+        const GLint projectionLocGrid = glGetUniformLocation(m_shaderProgramGrid, "projection");
+        CheckUniformLocation(projectionLocGrid, "projection");
+        GL_CALL(glUniformMatrix4fv(viewLocGrid, 1, GL_FALSE, glm::value_ptr(view)));
+        GL_CALL(glUniformMatrix4fv(projectionLocGrid, 1, GL_FALSE, glm::value_ptr(projection)));
+        GL_CALL(glDrawArrays(GL_TRIANGLES, 0, 6));
+
+
         //points
         GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_PointsVertexVBO));
         GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_drawVerticesPointsBuffer.size()*sizeof(float), m_drawVerticesPointsBuffer.data(), GL_DYNAMIC_DRAW));
@@ -179,6 +249,10 @@ namespace PointcloudToolbox
         GL_CALL(glBindVertexArray(m_lineVAO));
         GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_lineVertexVBO));
         GL_CALL(glDrawArrays(GL_LINES, 0, m_drawVerticesLinesCount));
+        m_stats = DrawBaseStats();
+        m_stats.m_numberOfVertex = m_drawVerticesLinesCount + m_drawPointsCount;
+        m_stats.m_numberOfDrawCalls += m_drawVerticesLinesCount > 0 ? 1 : 0;
+        m_stats.m_numberOfDrawCalls += m_drawPointsCount > 0 ? 1 : 0;
 
 
         // clear the buffer, to simulate a one-time draw
@@ -188,5 +262,12 @@ namespace PointcloudToolbox
         m_drawPointsCount = 0;
         m_drawVerticesPointsBuffer.clear();
 
+
+
+    }
+
+    DrawBaseStats AuxDraw::GetStatsForDrawCall()
+    {
+        return m_stats;
     }
 } // namespace PointcloudToolbox
