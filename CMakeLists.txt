@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 project(ImGuiOpenGLExample)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add your source files
@@ -35,14 +35,29 @@ include_directories(
 
 # Find and link GLEW and GLFW
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(glfw3 REQUIRED)
+
+include(FetchContent)
+
+# Fetch GLEW
+FetchContent_Declare(
+        GLEW
+        GIT_REPOSITORY https://github.com/nigels-com/glew.git
+        IT_TAG glew-2.1.0
+)
+
+# Fetch GLFW
+FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw.git
+        GIT_TAG 3.4
+)
+FetchContent_MakeAvailable(glfw)
 
 # Link against OpenGL, GLEW, and GLFW
 add_executable(sandbox  main.cpp ${SOURCES})
 
-target_link_libraries(sandbox OpenGL::GL GLEW::GLEW glfw)
+target_link_libraries(sandbox OpenGL::GL GLEW glfw)
 
 
 add_executable(helloWindow  examples/helloWindow.cpp ${SOURCES})
-target_link_libraries(helloWindow OpenGL::GL GLEW::GLEW glfw)
+target_link_libraries(helloWindow OpenGL::GL GLEW glfw)
