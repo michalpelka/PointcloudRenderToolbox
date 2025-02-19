@@ -58,7 +58,6 @@ namespace PointcloudToolbox
 
     void GLFW_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
     {
-        std::cout << "Mouse button callback" << button << " a " << action << std::endl;
         const auto* windowData = (WindowData*)glfwGetWindowUserPointer(window);
         std::string windowTitle = windowData->title;
         if (IsGLFWWindowFocused(window))
@@ -148,12 +147,11 @@ namespace PointcloudToolbox
         }
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+        //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
         // Setup Platform/Renderer bindings
 
@@ -206,14 +204,7 @@ namespace PointcloudToolbox
             glfwDestroyWindow((GLFWwindow*)windowData.NativeWindowPointer);
         }
 
-        if (windowData.cntx_imGui)
-        {
-            ImGui::SetCurrentContext(windowData.cntx_imGui);
-            ImGui_ImplOpenGL3_Shutdown();
-            ImGui_ImplGlfw_Shutdown();
-            ImGui::DestroyContext();
-        }
-
+        // Todo(mpelka) maybe we leak imgui cotnext here
         internal::windows.erase(handle);
     }
 
@@ -252,6 +243,7 @@ namespace PointcloudToolbox
             internal::windows.clear();
             internal::initialized = false;
         }
+
 
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();

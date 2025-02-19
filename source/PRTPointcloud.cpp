@@ -69,7 +69,7 @@ namespace PointcloudToolbox
 
         GL_CALL(glBindVertexArray(pointcloudData.VAO));
         GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, pointcloudData.VBO));
-        GL_CALL(glBufferData(GL_ARRAY_BUFFER, pointcloudData.vertices.size() * pointcloudData.sizePerVertex,  pointcloudData.vertices.data(), GL_STATIC_DRAW));
+        GL_CALL(glBufferData(GL_ARRAY_BUFFER, count * pointcloudData.sizePerVertex,  pointcloudData.vertices.data(), GL_STATIC_DRAW));
 
         // Position attribute (location = 0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,  pointcloudData.sizePerVertex, (void*)0);
