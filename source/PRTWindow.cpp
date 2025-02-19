@@ -287,7 +287,11 @@ namespace PointcloudToolbox
 
         // Clear the screen
         GL_CALL(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
-        GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
+        GL_CALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+        GL_CALL(glfwWindowHint(GLFW_DEPTH_BITS, 32));
+        GL_CALL(glEnable(GL_DEPTH_TEST));
+        GL_CALL(glEnable(GL_BLEND));
+        GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         DrawBaseStats stats;
         // User's drawables
         for (auto& drawable : windowData.m_drawables)

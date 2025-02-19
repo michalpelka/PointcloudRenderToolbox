@@ -46,6 +46,7 @@ include_directories(
         ${EXTERNAL_LIBRARIES_DIRECTORY}/imgui/backends
         ${GLFW_INCLUDE_DIRS}
         ${EXTERNAL_LIBRARIES_DIRECTORY}/glew-2.1.0/include
+        ${EXTERNAL_LIBRARIES_DIRECTORY}
         /usr/include
         include
 )
@@ -58,3 +59,6 @@ target_link_libraries(sandbox OpenGL::GL glfw)
 
 add_executable(helloWindow  examples/helloWindow.cpp ${SOURCES})
 target_link_libraries(helloWindow OpenGL::GL glfw)
+
+add_executable(plyViewer  examples/ply_viewer.cpp ${SOURCES})
+target_link_libraries(plyViewer OpenGL::GL glfw)

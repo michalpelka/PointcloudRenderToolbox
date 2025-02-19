@@ -117,7 +117,7 @@ void main() {
     i = mix(0,1.0,distanceToLine*50);
 
 
-    FragColor = vec4(i,i,i,i);
+    FragColor = vec4(i,i,i,0.2);
 }
 )";
 
