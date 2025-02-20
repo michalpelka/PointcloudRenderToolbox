@@ -1,13 +1,13 @@
 #include <PRTWindow.h>
 #include <iostream>
 #include <PRTPointcloud.h>
-
 void SetSceneLook(PointcloudToolbox::WindowHandle windowHandle,
                   float translate_x, float translate_y, float translate_z, float rotate_x, float rotate_y)
 {
     const auto [w, h] = PointcloudToolbox::GetWindowSize(windowHandle);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(translate_x, translate_y, translate_z));
+    glm::mat4 view = glm::mat4(1.0f);
 
+    view = glm::translate(view, glm::vec3(translate_x, translate_y, translate_z));
     view = glm::rotate(view, glm::radians(rotate_x), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, glm::radians(rotate_y), glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -18,7 +18,7 @@ void SetSceneLook(PointcloudToolbox::WindowHandle windowHandle,
 int main()
 {
 
-    float translate_x, translate_y = 0.0;
+    float translate_x =0.0, translate_y = 0.0;
     float translate_z = -50.0;
     float rotate_x = 0.0, rotate_y = 0.0;
     float mouse_old_x, mouse_old_y = 0.0;
@@ -95,12 +95,12 @@ int main()
     std::vector<float> pointcloud;
     for (int i = 0; i < 10000; i++)
     {
-            pointcloud.push_back(sin(M_PI*1.0*i/100));
-            pointcloud.push_back(cos(M_PI*1.0*i/100));
-            pointcloud.push_back(0);
-            pointcloud.push_back(1.0f);
-            pointcloud.push_back(0.0f);
-            pointcloud.push_back(0.0f);
+        pointcloud.push_back(sin(glm::pi<double>()* 1.0 * i /100));
+        pointcloud.push_back(cos(glm::pi<double>() * 1.0 * i / 100));
+        pointcloud.push_back(0);
+        pointcloud.push_back(1.0f);
+        pointcloud.push_back(0.0f);
+        pointcloud.push_back(0.0f);
     }
     //clang-format on
     pcDraw->AcquirePointcloudHandle(glm::mat4(1.0f), pointcloud.data(), 1000, PointcloudToolbox::PointcloudDraw::DataLayout::DATALAYOUT_XYZFLOAT_RGBFLOAT);
@@ -111,10 +111,10 @@ int main()
         auxDraw->DrawLine(glm::vec3(0, 0, 0), glm::vec3(length,0,0), glm::vec3(1, 0, 0));
         auxDraw->DrawLine(glm::vec3(0, 0, 0), glm::vec3(0,length,0), glm::vec3(0, 1, 0));
         auxDraw->DrawLine(glm::vec3(0, 0, 0), glm::vec3(0,0,length), glm::vec3(0, 0, 1));
-//        auxDraw->DrawPoint(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 10.0f);
-//        auxDraw->DrawPoint(glm::vec3(length, 0, 0), glm::vec3(1, 0, 0), 5.0f);
-//        auxDraw->DrawPoint(glm::vec3(0, length, 0), glm::vec3(0, 1, 0), 5.0f);
-//        auxDraw->DrawPoint(glm::vec3(0, 0, length), glm::vec3(0, 0, 1), 5.0f);
+        auxDraw->DrawPoint(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), 10.0f);
+        auxDraw->DrawPoint(glm::vec3(length, 0, 0), glm::vec3(1, 0, 0), 5.0f);
+        auxDraw->DrawPoint(glm::vec3(0, length, 0), glm::vec3(0, 1, 0), 5.0f);
+        auxDraw->DrawPoint(glm::vec3(0, 0, length), glm::vec3(0, 0, 1), 5.0f);
         PointcloudToolbox::SetWindowImGuiRenderCallback(window1Handle, [&]()
         {
             ImGui::Begin("Hello, world!");

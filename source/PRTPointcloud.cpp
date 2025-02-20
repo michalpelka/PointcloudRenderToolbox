@@ -58,7 +58,8 @@ namespace PointcloudToolbox
         PointcloudHandle handle = m_pointclouds.size();
         PointcloudData pointcloudData;
         pointcloudData.count = count;
-        pointcloudData.vertices = std::vector<float>(data, data + count * layoutSize);
+        pointcloudData.vertices.resize(count * layoutSize);
+        std::memcpy(pointcloudData.vertices.data(), data, count * layoutSize );
         pointcloudData.VAO = 0;
         pointcloudData.VBO = 0;
         pointcloudData.layout = layout;
@@ -69,7 +70,7 @@ namespace PointcloudToolbox
 
         GL_CALL(glBindVertexArray(pointcloudData.VAO));
         GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, pointcloudData.VBO));
-        GL_CALL(glBufferData(GL_ARRAY_BUFFER, pointcloudData.vertices.size() * pointcloudData.sizePerVertex,  pointcloudData.vertices.data(), GL_STATIC_DRAW));
+        GL_CALL(glBufferData(GL_ARRAY_BUFFER, count * pointcloudData.sizePerVertex,  pointcloudData.vertices.data(), GL_STATIC_DRAW));
 
         // Position attribute (location = 0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,  pointcloudData.sizePerVertex, (void*)0);
@@ -106,35 +107,6 @@ namespace PointcloudToolbox
             m_stats.m_numberOfVertex += vertexCount;
             m_stats.m_numberOfDrawCalls += vertexCount > 0 ? 1 : 0;
         }
-
-        //
-        //
-        //        // lines
-        //        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_lineVertexVBO));
-        //        GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_drawVerticesLinesBuffer.size()*sizeof(float), m_drawVerticesLinesBuffer.data(),
-        //        GL_DYNAMIC_DRAW)); GL_CALL(glUseProgram(m_shaderProgramLines));
-        //        // Set uniform matrices in the shader
-        //        const GLint viewLoc = glGetUniformLocation(m_shaderProgramLines, "view");
-        //        CheckUniformLocation(viewLoc, "view");
-        //        const GLint projectionLoc = glGetUniformLocation(m_shaderProgramLines, "projection");
-        //        CheckUniformLocation(projectionLoc, "projection");
-        //        GL_CALL(glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view)));
-        //        GL_CALL(glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection)));
-        //        GL_CALL(glBindVertexArray(m_lineVAO));
-        //        GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_lineVertexVBO));
-        //        GL_CALL(glDrawArrays(GL_LINES, 0, m_drawVerticesLinesCount));
-        //        m_stats = DrawBaseStats();
-        //        m_stats.m_numberOfVertex = m_drawVerticesLinesCount + m_drawPointsCount;
-        //        m_stats.m_numberOfDrawCalls += m_drawVerticesLinesCount > 0 ? 1 : 0;
-        //        m_stats.m_numberOfDrawCalls += m_drawPointsCount > 0 ? 1 : 0;
-        //
-        //
-        //        // clear the buffer, to simulate a one-time draw
-        //        m_drawVerticesLinesCount = 0;
-        //        m_drawVerticesLinesBuffer.clear();
-        //
-        //        m_drawPointsCount = 0;
-        //        m_drawVerticesPointsBuffer.clear();
     }
 
     DrawBaseStats PointcloudDraw::GetStatsForDrawCall()

@@ -79,7 +79,8 @@ namespace PointcloudToolbox
     } // namespace internal
 
     //! Create a new window and return its handle.
-    WindowHandle CreateWindow(std::string title, int width, int height, std::vector<std::shared_ptr<DrawBase>> drawables = {std::make_shared<AuxDraw>(), std::make_shared<PointcloudDraw>()});
+    WindowHandle CreateWindow(std::string title, int width, int height, std::vector<std::shared_ptr<DrawBase>> drawables = {
+                                                                            std::make_shared<PointcloudDraw>(), std::make_shared<AuxDraw>()});
 
     //! Destroy the window with the given handle.
     void DestroyWindow(WindowHandle handle);

@@ -117,7 +117,7 @@ void main() {
     i = mix(0,1.0,distanceToLine*50);
 
 
-    FragColor = vec4(i,i,i,i);
+    FragColor = vec4(i,i,i,0.2);
 }
 )";
 
@@ -209,7 +209,7 @@ namespace PointcloudToolbox
 
         GL_CALL(glEnable(GL_PROGRAM_POINT_SIZE));
 
-        // grid
+        //// grid
         GL_CALL(glUseProgram(m_shaderProgramGrid));
         const GLint viewLocGrid = glGetUniformLocation(m_shaderProgramGrid, "view");
         CheckUniformLocation(viewLocGrid, "view");

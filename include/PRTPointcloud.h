@@ -22,7 +22,7 @@ namespace PointcloudToolbox
 
         const std::unordered_map<DataLayout, size_t>
         DataLayoutToSize = {
-            {DataLayout::DATALAYOUT_XYZFLOAT_RGBFLOAT, 24}
+            {DataLayout::DATALAYOUT_XYZFLOAT_RGBFLOAT, 6*sizeof (float)}
         };
 
         const std::unordered_map<DataLayout, size_t>
